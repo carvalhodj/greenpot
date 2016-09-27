@@ -1,0 +1,94 @@
+.corBar {
+    background-color: green;
+    color: green;
+}
+
+.corThum {
+    background-color: green;
+    color: green;
+}
+
+.container {
+    padding: 50px;
+}
+
+.descricaoImg {
+    color: white;
+    text-align: center;
+}
+
+.imgPerfil {
+    width: 40px;
+    height: 40px;
+    float: right;
+    margin-top: -7px;
+    border-radius: 50px;
+}
+
+.boxStyle {
+    width: 300px;
+    height: 200px;
+}
+
+.expand:hover {
+    -ms-transform: scale(1.05); /* IE 9 */
+    -webkit-transform: scale(1.05); /* Safari */
+    transform: scale(1.05);
+}
+
+.expand2:hover {
+    -ms-transform: scale(1.5); /* IE 9 */
+    -webkit-transform: scale(1.5); /* Safari */
+    transform: scale(1.5);
+}
+
+@keyframes showButtons {
+    from {
+        $("bb").css("display","none");
+    }
+
+    to {
+         $("bb").css("display","normal");
+    }
+}
+
+.white, .white a {
+  color: #fff;
+}
+
+.glyphicon {
+    font-size: 50px;
+}
+
+To target only one icon,
+
+.glyphicon.glyphicon-arrow-left {
+    font-size: 50px;
+}
+
+
+
+.glyphicon {
+    font-size: 30px;
+}
+
+.glyphicon {
+    font-size: 40px;
+}
+
+#conteudo{
+    margin-top:-20px;
+}
+
+.nada{}
+
+a:hover {
+    margin-bottom: 0px;
+    animation-name: showButtons;
+    animation-duration: 0.5s;    
+    animation-fill-mode:forwards;
+}
+
+a:-webkit-any-link{
+    text-decoration: none;
+}

@@ -1,0 +1,22 @@
+body {
+
+
+}
+
+.corBar {
+    background-color: green;
+    color: green;
+}
+
+.navbar{
+    border-radius: 0;
+
+}
+
+.navbar-brand{
+    font-family: 'Satisfy', cursive;
+}
+
+.inner-bg {
+    padding: 100px 0 170px 0;
+}
