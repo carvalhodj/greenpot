@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.core.urlresolvers import reverse
-
+from django.conf import settings
 # Create your models here.
 
 class Planta(models.Model):
@@ -27,12 +27,13 @@ class Pote(models.Model):
     codigo = models.CharField(max_length=10)
     planta = models.ForeignKey(Planta, on_delete=models.CASCADE)
 
+
 class Usuario_Pote(models.Model):
-    def __str__(self):
-        return self.user +  " " +" " + self.pote
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     pote = models.ForeignKey(Pote, on_delete=models.CASCADE)
-
+    def __str__(self):
+        return self.user.username +  " " +" " + self.pote.codigo
 
 
 
