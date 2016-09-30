@@ -11,11 +11,11 @@
     <script src="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js"></script>
 
 </head>
-<body>
+
 {% block body%}
 
-{% block content %}
-<form style="margin-top:100px" method="post">
+
+<form style="margin-top:100px" method="post" enctype="multipart/form-data">
     {% csrf_token %}
     <div class="row">
         <div class="col-md-8 col-md-offset-2">
@@ -75,9 +75,8 @@
         </div>
 </form>
 
-{% endblock %}
+
 
 {% endblock%}
 
-</body>
-</html>
+

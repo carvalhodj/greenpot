@@ -8,9 +8,9 @@ from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from django.core.urlresolvers import reverse_lazy
 from .models import Planta, Pote, Usuario_Pote
-from home.forms import RegistroForm, MeuForm
+from home.forms import RegistroForm, MeuForm, ContactForm
 
-
+#from .forms import SignUpForm
 
 
 class HomeView(generic.ListView):
@@ -19,67 +19,77 @@ class HomeView(generic.ListView):
 
     def get_queryset(self):
         usuario = self.request.user
-        teste = Usuario_Pote.objects.filter(user=usuario)
-        print(teste)
-        return teste
+        potes = Usuario_Pote.objects.filter(user=usuario)
+        return potes
 
 
-class RegistrarUsuario(CreateView):
-    model = User
-    template_name = 'home/registrar.html'
-    form_class = RegistroForm
-    success_url = reverse_lazy('home')
+
+
+def contact(request):
+    form = ContactForm(request.POST or None)
+
+    context = {
+        "form": form,
+    }
+    return render(request, "home/forms.html", context)
+
+
+
 
 class DetailView(generic.DetailView):
 
     model = Planta
     template_name = 'home/detail.html'
 
-class PoteCreate(View):
+class RegistrarUsuario(CreateView):
+    model = User
+    form_class = RegistroForm
+    template_name = 'home/cadastro_form.html'
 
-    model = Pote
-
-
-    form_class= MeuForm
-    template_name = 'home/album_form.html'
-
+    #success_url = reverse_lazy('home')
     def get(self, request):
         form =self.form_class(None)
         return render(request, self.template_name,{'form':form})
-
     def post(self, request):
         form = self.form_class(request.POST)
-
         if form.is_valid():
             pote = form.save(commit=False)
+            pote.save()
 
+            return redirect('login')
+        return render(request, self.template_name, {'form': form})
+
+
+class PoteCreate(View):
+    model = Pote
+    form_class= MeuForm
+    template_name = 'home/album_form.html'
+    def get(self, request):
+        form =self.form_class(None)
+        return render(request, self.template_name,{'form':form})
+    def post(self, request):
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            pote = form.save(commit=False)
             codigo = form.cleaned_data['codigo']
-            planta = form.cleaned_data['planta']
             pote.save()
             teste = Pote.objects.get(codigo=codigo)
-            print(teste.pk)
             username = request.user
-            print(username.pk)
-
             userpote = Usuario_Pote()
             userpote.user = username
             userpote.pote = teste
             userpote.save()
-
             return redirect('home')
-
-
-
-
-
-
-
-
-
         return render(request, self.template_name, {'form': form})
 
 
+class PoteUpdate(UpdateView):
+    model = Pote
+    fields = ['codigo','planta']
 
+class PoteDelete(DeleteView):
+    model = Pote
+    success_url = reverse_lazy('home')
 
 
 

@@ -9,7 +9,7 @@ class Planta(models.Model):
 
     planta_logo = models.CharField(max_length=1000)
 
-    descricao_planta = models.CharField(max_length=1000)
+    descricao_planta = models.CharField(max_length=1500)
 
     def get_absolute_url(self):
         return reverse('detail', kwargs={'pk': self.pk})

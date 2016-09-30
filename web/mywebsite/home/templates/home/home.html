@@ -19,13 +19,13 @@
 						</a>
 						<div class="caption">
 							<h2>{{ userpote.pote.planta.nome }}</h2>
-							<h4>{{ userpote.pote.planta.descricao_planta }}</h4>
+							<h4>CodigoPote: {{ userpote.pote.codigo }}</h4>
 
 							<!-- View Details -->
-							<a href="{% url 'detail' userpote.pote.planta.id %}" class="btn btn-primary btn-sm" role="button">View Details</a>
+							<a href="{% url 'detail' userpote.pote.planta.id %}" class="btn btn-primary btn-sm" role="button">Ver detalhes</a>
 
 							<!-- Delete Album -->
-							<form action="#" method="post" style="display: inline;">
+							<form action="{% url 'pote-delete' userpote.pote.id %}" method="post" style="display: inline;">
 								{% csrf_token %}
 								<input type="hidden" name="album_id" value="{{ planta.id }}" />
 								<button type="submit" class="btn btn-default btn-sm">
@@ -45,6 +45,8 @@
 
 
 	{% else %}
+		  <h1> Você não tem Pote </h1>
+    <h2> Cadastre seu Pote  <a href="{% url 'pote-add'  %}" class="btn btn-primary btn-sm" role="button">Aqui</a></h2>
 
 	{% endif %}
 
