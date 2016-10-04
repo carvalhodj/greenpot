@@ -4,10 +4,6 @@ from  django import forms
 from .models import Planta, Pote
 
 
-
-
-
-
 class ContactForm(forms.Form):
     username = forms.CharField()
     last_name = forms.CharField()

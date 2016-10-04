@@ -2,6 +2,8 @@ from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 from . import views
 from django.contrib.auth.views import login,logout_then_login
+from rest_framework.urlpatterns import format_suffix_patterns
+from home import views
 
 app_name = 'home'
 urlpatterns = [
@@ -21,4 +23,8 @@ urlpatterns = [
     url(r'pote(?P<pk>[0-9]+)/delete/$', login_required(views.PoteDelete.as_view()), name='pote-delete'),
 
     url(r'^contact/$', 'home.views.contact', name='contact'),
+
+    url(r'^potesapi/$', views.PoteList.as_view()),
 ]
+
+urlpatterns = format_suffix_patterns(urlpatterns)

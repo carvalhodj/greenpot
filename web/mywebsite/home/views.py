@@ -10,6 +10,11 @@ from django.core.urlresolvers import reverse_lazy
 from .models import Planta, Pote, Usuario_Pote
 from home.forms import RegistroForm, MeuForm, ContactForm
 
+from rest_framework.views import APIView
+from rest_framework.response import Response
+from rest_framework import status
+from .serializer import PoteSerializer
+
 #from .forms import SignUpForm
 
 
@@ -90,6 +95,16 @@ class PoteUpdate(UpdateView):
 class PoteDelete(DeleteView):
     model = Pote
     success_url = reverse_lazy('home')
+
+class PoteList(APIView):
+
+    def get(self, request):
+        potes = Pote.objects.all()
+        serializer = PoteSerializer(potes, many=True)
+        return Response(serializer.data)
+
+    def post(self):
+        pass
 
 
 
