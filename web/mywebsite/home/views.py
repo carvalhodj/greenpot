@@ -15,6 +15,8 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializer import PoteSerializer
 
+from .mqttClient import Teste
+
 #from .forms import SignUpForm
 
 
@@ -78,8 +80,12 @@ class PoteCreate(View):
             pote = form.save(commit=False)
             codigo = form.cleaned_data['codigo']
             pote.save()
+            x = Teste()
+
             teste = Pote.objects.get(codigo=codigo)
             username = request.user
+            umidade = teste.planta.umidade
+            x.EnviarUmidade(umidade)
             userpote = Usuario_Pote()
             userpote.user = username
             userpote.pote = teste
