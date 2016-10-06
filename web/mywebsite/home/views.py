@@ -101,6 +101,7 @@ class PoteUpdate(UpdateView):
 class PoteDelete(DeleteView):
     model = Pote
     success_url = reverse_lazy('home')
+    # Mandar uma msg MqTT para resetar o vaso
 
 class PoteList(APIView):
 
