@@ -2,7 +2,7 @@ import paho.mqtt.client as mqtt
 
 def on_connect(client, userdata, flags, rc):
 	print("Connected with result code "+str(rc))
-	client.subscribe("temp/airton")
+	client.subscribe("temp/carvalhodj")
 
 def on_message(client, userdata, msg):
 	print msg.payload
@@ -20,7 +20,7 @@ client.on_publish = on_publish
 
 class Teste:
 	def EnviarUmidade(self, umidade):
-		client.publish("temp/airton", umidade)
+		client.publish("temp/carvalhodj", umidade)
 
 
 client.loop_start()

@@ -1,11 +1,13 @@
+#include <EEPROM.h>
 #include <PubSubClient.h>
 #include <ESP8266WiFi.h>
+
 
 #define POWER D4
 #define PUMP D2
 
-const char *ssid = "rede3";
-const char *password = "#r3d33#rur@l";
+const char *ssid = "DEJOTA.B";
+const char *password = "a1b2C#D$";
 const char *mqtt_server = "test.mosquitto.org";
 
 void setupWIFI();
@@ -18,7 +20,7 @@ PubSubClient client(espClient);
 long unsigned lastMsg = 0;
 char msg[50];
 int value = 0;
-int treshold = 0;
+uint8_t treshold = 0;
 int umidade = 1000;
 bool ligaDesliga = false;
 
@@ -27,6 +29,7 @@ void setup() {
   pinMode(PUMP, OUTPUT);
   digitalWrite(POWER, HIGH);
   digitalWrite(PUMP, LOW);
+  EEPROM.begin(4);
   Serial.begin(115200);
   setupWIFI();
   client.setServer(mqtt_server, 1883);
@@ -47,12 +50,14 @@ void loop() {
   else {
       if (treshold == 0) {
         Serial.println("Favor setar o limiar de umidade!");
+        Serial.println(EEPROM.read(0));
       }
       else if (umidade < treshold) {
         while (umidade < 1000){
           digitalWrite(PUMP, HIGH);
           umidade += 20;
           Serial.println("Irrigando...");
+          Serial.println(umidade);
           delay(1000);
         }
       digitalWrite(PUMP, LOW);
@@ -83,8 +88,17 @@ void callback(char* topic, byte* payload, unsigned int length)
         break;
 
        default:
+//        if (EEPROM.read(0) > 0) {
+//          treshold = EEPROM.read(0);
+//          EEPROM.end();
+//        }
+   
         String s = ((char *) payload);
-        treshold = s.toInt();
+        int x = s.toInt();
+        EEPROM.write(0, x);
+        treshold = EEPROM.read(0);
+        EEPROM.end();
+        
     }
 }
 

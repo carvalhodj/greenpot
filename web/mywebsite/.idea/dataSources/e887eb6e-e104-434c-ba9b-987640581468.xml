@@ -380,27 +380,31 @@ model</columns>
       <mandatory>1</mandatory>
       <data-type>VARCHAR(1500)(0,-1)|12</data-type>
     </column>
-    <key id="91" parent="12">
+    <column id="91" parent="12" name="umidade">
+      <mandatory>1</mandatory>
+      <data-type>VARCHAR(20)(0,-1)|12</data-type>
+    </column>
+    <key id="92" parent="12">
       <columns>id</columns>
       <primary>1</primary>
     </key>
-    <column id="92" parent="13" name="id">
+    <column id="93" parent="13" name="id">
       <mandatory>1</mandatory>
       <data-type>INTEGER(0,-1)|4</data-type>
     </column>
-    <column id="93" parent="13" name="codigo">
+    <column id="94" parent="13" name="codigo">
       <mandatory>1</mandatory>
       <data-type>VARCHAR(10)(0,-1)|12</data-type>
     </column>
-    <column id="94" parent="13" name="planta_id">
+    <column id="95" parent="13" name="planta_id">
       <mandatory>1</mandatory>
       <data-type>INTEGER(0,-1)|4</data-type>
     </column>
-    <key id="95" parent="13">
+    <key id="96" parent="13">
       <columns>id</columns>
       <primary>1</primary>
     </key>
-    <foreign-key id="96" parent="13" name="#FAKE_home_pote_1">
+    <foreign-key id="97" parent="13" name="#FAKE_home_pote_1">
       <name-surrogate>1</name-surrogate>
       <columns>planta_id</columns>
       <deferrable>1</deferrable>
@@ -409,23 +413,23 @@ model</columns>
       <cascade-update-rule>no_action</cascade-update-rule>
       <cascade-delete-rule>no_action</cascade-delete-rule>
     </foreign-key>
-    <column id="97" parent="14" name="id">
+    <column id="98" parent="14" name="id">
       <mandatory>1</mandatory>
       <data-type>INTEGER(0,-1)|4</data-type>
     </column>
-    <column id="98" parent="14" name="pote_id">
+    <column id="99" parent="14" name="pote_id">
       <mandatory>1</mandatory>
       <data-type>INTEGER(0,-1)|4</data-type>
     </column>
-    <column id="99" parent="14" name="user_id">
+    <column id="100" parent="14" name="user_id">
       <mandatory>1</mandatory>
       <data-type>INTEGER(0,-1)|4</data-type>
     </column>
-    <key id="100" parent="14">
+    <key id="101" parent="14">
       <columns>id</columns>
       <primary>1</primary>
     </key>
-    <foreign-key id="101" parent="14" name="#FAKE_home_usuario_pote_2">
+    <foreign-key id="102" parent="14" name="#FAKE_home_usuario_pote_2">
       <name-surrogate>1</name-surrogate>
       <columns>pote_id</columns>
       <deferrable>1</deferrable>
@@ -434,7 +438,7 @@ model</columns>
       <cascade-update-rule>no_action</cascade-update-rule>
       <cascade-delete-rule>no_action</cascade-delete-rule>
     </foreign-key>
-    <foreign-key id="102" parent="14" name="#FAKE_home_usuario_pote_1">
+    <foreign-key id="103" parent="14" name="#FAKE_home_usuario_pote_1">
       <name-surrogate>1</name-surrogate>
       <columns>user_id</columns>
       <deferrable>1</deferrable>
@@ -443,10 +447,10 @@ model</columns>
       <cascade-update-rule>no_action</cascade-update-rule>
       <cascade-delete-rule>no_action</cascade-delete-rule>
     </foreign-key>
-    <column id="103" parent="15" name="name">
+    <column id="104" parent="15" name="name">
       <data-type>(0,-1)|12</data-type>
     </column>
-    <column id="104" parent="15" name="seq">
+    <column id="105" parent="15" name="seq">
       <data-type>(0,-1)|12</data-type>
     </column>
   </database-model>
