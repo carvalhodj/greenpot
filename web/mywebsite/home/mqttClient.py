@@ -18,7 +18,7 @@ client.on_publish = on_publish
 
 #client.publish("temp/airton", "my message")
 
-class Teste:
+class Commqtt:
 	def EnviarUmidade(self, umidade):
 		client.publish("temp/carvalhodj", umidade)
 

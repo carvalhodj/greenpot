@@ -15,10 +15,14 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializer import PoteSerializer
 
-from .mqttClient import Teste
+from .mqttClient import Commqtt
+from .controler import CadastroControler, BuscarControler
 
 #from .forms import SignUpForm
 
+cadastro = CadastroControler()
+commqtt = Commqtt()
+buscar = BuscarControler()
 
 class HomeView(generic.ListView):
     template_name = 'home/home.html'
@@ -79,17 +83,12 @@ class PoteCreate(View):
         if form.is_valid():
             pote = form.save(commit=False)
             codigo = form.cleaned_data['codigo']
-            pote.save()
-            x = Teste()
-
-            teste = Pote.objects.get(codigo=codigo)
-            username = request.user
-            umidade = teste.planta.umidade
-            x.EnviarUmidade(umidade)
-            userpote = Usuario_Pote()
-            userpote.user = username
-            userpote.pote = teste
-            userpote.save()
+            cadastro.CadastrarPote(pote)
+            pot = buscar.BuscarPoteCodigo(codigo)
+            umidade = pot.planta.umidade
+            commqtt.EnviarUmidade(umidade)
+            usuario = request.user
+            cadastro.CadastrarUsuarioPote(pot,usuario)
             return redirect('home')
         return render(request, self.template_name, {'form': form})
 
