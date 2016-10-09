@@ -4,20 +4,23 @@
 #define POWER D4
 #define PUMP D2
 
-const char *ssid = "d3jotaRedmi2Pro";
-const char *password = "qwertyasd";
+const char *ssid = "ZEFINHA";
+const char *password = "11240039099ZRM";
 const char *mqtt_server = "test.mosquitto.org";
+const char *unique_code = "1122334490";
+const char *topic = "temp/greenpot";
 
 void setupWIFI();
 void reconectar();
 void verificarUmidade();
+void requisitarNivelUmidade();
 void callback(char* topic, byte* payload, unsigned int length);
 
 WiFiClient espClient;
 PubSubClient client(espClient);
 
 //long unsigned lastMsg = 0;
-//char msg[50];
+char msg[50];
 int value = 0;
 int treshold = 0;
 int umidade = 1000;
@@ -40,7 +43,8 @@ void setup() {
   setupWIFI();
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
-  client.subscribe("temp/carvalhodj");
+  client.subscribe(topic);
+  requisitarNivelUmidade();
 }
 
 void loop() {
@@ -48,6 +52,7 @@ void loop() {
     reconectar();
   }
   client.loop();
+  Serial.println(treshold);
   umidade -= 50; // Simulação de decrescimento de umidade
   //client.publish("greenpots/codes", (char *) umidade);
   if (!ligaDesliga) {
@@ -113,7 +118,7 @@ void reconectar() {
     Serial.println("Conectando ao Broker MQTT.");
     if (client.connect("ESP8266")) {
       Serial.println("Conectado com Sucesso ao Broker");
-      client.subscribe("temp/carvalhodj");
+      client.subscribe(topic);
     } else {
       Serial.print("Falha ao Conectador, rc=");
       Serial.print(client.state());
@@ -131,6 +136,7 @@ void verificarUmidade() {
    */
   if (treshold == 0) {
     Serial.println("Favor setar o limiar de umidade!");
+    requisitarNivelUmidade();
   }
   else if (umidade < treshold) {
     while (umidade < 1000) {
@@ -146,3 +152,11 @@ void verificarUmidade() {
   }
 }
 
+void requisitarNivelUmidade() {
+  /* Função para requsitar o nível de umidade mínimo para a
+   *  sobrevivência da respectiva planta
+   */
+  client.subscribe(topic);
+  sprintf(msg, "T-%s", unique_code);
+  client.publish(topic, msg);
+}
