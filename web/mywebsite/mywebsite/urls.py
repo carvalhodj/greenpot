@@ -20,5 +20,6 @@ from django.contrib.auth.views import login
 urlpatterns = [
     url(r'^admin/', include(admin.site.urls)),
     url(r'^', include('home.urls')),
-    url(r'^accounts/login', login, {'template_name': 'home/login.html'})
+    url(r'^accounts/login', login, {'template_name': 'home/login.html'}),
+    url(r'^api/greenpot/', include("api.urls", namespace='greenpot')),
 ]

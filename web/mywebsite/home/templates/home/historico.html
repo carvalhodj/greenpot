@@ -1,0 +1,35 @@
+
+{% extends 'home/base.html' %}
+
+{% block title %}Historico{% endblock %}
+
+{% block body %}
+
+
+
+<table class="table">
+  <thead class="thead-default">
+    <tr>
+      <th></th>
+      <th>Umidade Inicial</th>
+      <th>Hora do Acionamento</th>
+
+    </tr>
+  </thead>
+  <tbody>
+{% for linha in historicopote %}
+
+    <tr>
+      <th scope="row"></th>
+      <td>{{linha.umidade_inicio}}</td>
+      <td>{{ linha.hora_do_acionamento }}</td>
+
+    </tr>
+
+
+  {% endfor %}
+
+  </tbody>
+</table>
+
+{% endblock %}

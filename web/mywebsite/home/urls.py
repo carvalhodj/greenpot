@@ -18,6 +18,8 @@ urlpatterns = [
 
     url(r'^(?P<pk>[0-9]+)/$', login_required(views.DetailView.as_view()), name='detail'),
 
+    url(r'^historico/(?P<codigo>[0-9]+)/$', views.historico),
+
     url(r'pote/add/$', login_required(views.PoteCreate.as_view()), name='pote-add'),
 
     url(r'pote(?P<pk>[0-9]+)/delete/$', login_required(views.PoteDelete.as_view()), name='pote-delete'),

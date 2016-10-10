@@ -1,4 +1,4 @@
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 
 from django.contrib.auth.models import User
 from django.contrib.auth.forms import UserCreationForm
@@ -7,7 +7,7 @@ from django.views.generic import View
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
 
 from django.core.urlresolvers import reverse_lazy
-from .models import Planta, Pote, Usuario_Pote
+from .models import Planta, Pote, Usuario_Pote, Historico_irrigacao
 from home.forms import RegistroForm, MeuForm, ContactForm
 
 from rest_framework.views import APIView
@@ -15,13 +15,15 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializer import PoteSerializer
 
-from .mqttClient import Commqtt
+
+
+
 from .controler import CadastroControler, BuscarControler
 
 #from .forms import SignUpForm
 
 cadastro = CadastroControler()
-commqtt = Commqtt()
+
 buscar = BuscarControler()
 
 class HomeView(generic.ListView):
@@ -33,6 +35,18 @@ class HomeView(generic.ListView):
         potes = Usuario_Pote.objects.filter(user=usuario)
         return potes
 
+class HistoricoView(generic.DetailView):
+    context_object_name = 'historico_list'
+    template_name = 'home/historico.html'
+    model = Pote
+
+
+    def get_context_data(self,**kwargs):
+        context = super(HistoricoView, self).get_context_data(**kwargs)
+        context['historico']= Historico_irrigacao.objects.all()
+
+
+        return context
 
 
 
@@ -45,12 +59,19 @@ def contact(request):
     return render(request, "home/forms.html", context)
 
 
+def historico(request, codigo):
+    post = get_object_or_404(Pote, codigo=codigo)
+    historicopote = Historico_irrigacao.objects.filter(pote=post)
+    return render(request, 'home/historico.html',{'historicopote': historicopote})
+
 
 
 class DetailView(generic.DetailView):
 
     model = Planta
     template_name = 'home/detail.html'
+
+
 
 class RegistrarUsuario(CreateView):
     model = User
@@ -82,13 +103,9 @@ class PoteCreate(View):
         form = self.form_class(request.POST)
         if form.is_valid():
             pote = form.save(commit=False)
-            codigo = form.cleaned_data['codigo']
-            cadastro.CadastrarPote(pote)
-            pot = buscar.BuscarPoteCodigo(codigo)
-            umidade = pot.planta.umidade
-            commqtt.EnviarUmidade(umidade)
+            #codigo = form.cleaned_data['codigo']
             usuario = request.user
-            cadastro.CadastrarUsuarioPote(pot,usuario)
+            cadastro.CadastrarUsuarioPote(pote, usuario)
             return redirect('home')
         return render(request, self.template_name, {'form': form})
 

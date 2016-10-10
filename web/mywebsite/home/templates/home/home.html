@@ -22,10 +22,12 @@
 							<h4>CodigoPote: {{ userpote.pote.codigo }}</h4>
 
 							<!-- View Details -->
-							<a href="{% url 'detail' userpote.pote.planta.id %}" class="btn btn-primary btn-sm" role="button">Ver detalhes</a>
+							<a href="{% url 'detail' userpote.pote.planta.id %}" class="btn btn-primary btn-sm" role="button">Detalhes da planta</a>
+
+                            <a href="{% url 'home.views.historico' codigo=userpote.pote.codigo %}" class="btn btn-primary btn-sm" role="button">Historico</a>
 
 							<!-- Delete Album -->
-							<form action="{% url 'pote-delete' userpote.pote.id %}" method="post" style="display: inline;">
+							<form action="{% url 'pote-delete' userpote.pote.codigo %}" method="post" style="display: inline;">
 								{% csrf_token %}
 								<input type="hidden" name="album_id" value="{{ planta.id }}" />
 								<button type="submit" class="btn btn-default btn-sm">

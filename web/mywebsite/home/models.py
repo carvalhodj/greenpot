@@ -6,11 +6,8 @@ from django.conf import settings
 
 class Planta(models.Model):
     nome = models.CharField(max_length=250)
-
     planta_logo = models.CharField(max_length=1000)
-
     descricao_planta = models.CharField(max_length=1500)
-
     umidade = models.CharField(max_length=20)
 
     def get_absolute_url(self):
@@ -25,8 +22,8 @@ class Planta(models.Model):
 
 class Pote(models.Model):
     def __str__(self):
-        return self.codigo
-    codigo = models.CharField(max_length=10)
+        return str(self.codigo)
+    codigo = models.IntegerField(primary_key=True)
     planta = models.ForeignKey(Planta, on_delete=models.CASCADE)
 
 
@@ -37,8 +34,12 @@ class Usuario_Pote(models.Model):
     def __str__(self):
         return self.user.username +  " " +" " + self.pote.codigo
 
-
-
+class Historico_irrigacao(models.Model):
+    pote = models.ForeignKey(Pote, on_delete=models.CASCADE)
+    hora_do_acionamento = models.CharField(max_length=10)
+    umidade_inicio = models.CharField(max_length=10)
+    def __str__(self):
+        return self.hora_do_acionamento
 
 
 
