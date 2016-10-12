@@ -14,40 +14,27 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .serializer import PoteSerializer
+from .controler import CadastroControler, BuscarControler, ListAdapter
+#from mqttClient import Commqtt
 
+from DominioDTO import AdapterHistoricoUmidadeAtual
 
-
-
-from .controler import CadastroControler, BuscarControler
-
+#commqtt = Commqtt()
 #from .forms import SignUpForm
 
 cadastro = CadastroControler()
 
 buscar = BuscarControler()
 
+listadapter = ListAdapter()
+
 class HomeView(generic.ListView):
     template_name = 'home/home.html'
     context_object_name = 'all_plantas'
-
     def get_queryset(self):
         usuario = self.request.user
-        potes = Usuario_Pote.objects.filter(user=usuario)
-        return potes
-
-class HistoricoView(generic.DetailView):
-    context_object_name = 'historico_list'
-    template_name = 'home/historico.html'
-    model = Pote
-
-
-    def get_context_data(self,**kwargs):
-        context = super(HistoricoView, self).get_context_data(**kwargs)
-        context['historico']= Historico_irrigacao.objects.all()
-
-
-        return context
-
+        lista = listadapter.ListAdapterHome(usuario)
+        return lista
 
 
 def contact(request):
@@ -60,9 +47,12 @@ def contact(request):
 
 
 def historico(request, codigo):
+
     post = get_object_or_404(Pote, codigo=codigo)
-    historicopote = Historico_irrigacao.objects.filter(pote=post)
-    return render(request, 'home/historico.html',{'historicopote': historicopote})
+    historicopote = buscar.BuscarHistoricoPote(post)
+    historicop = list(reversed(historicopote))
+    print historicop
+    return render(request, 'home/historico.html',{'historicopote': historicop})
 
 
 
@@ -117,7 +107,7 @@ class PoteUpdate(UpdateView):
 class PoteDelete(DeleteView):
     model = Pote
     success_url = reverse_lazy('home')
-    # Mandar uma msg MqTT para resetar o vaso
+
 
 class PoteList(APIView):
 
