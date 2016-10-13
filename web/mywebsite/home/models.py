@@ -32,7 +32,7 @@ class Usuario_Pote(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     pote = models.ForeignKey(Pote, on_delete=models.CASCADE)
     def __str__(self):
-        return self.user.username +  " " +" " + self.pote.codigo
+        return self.user.username +  " " + " " + str(self.pote.codigo)
 
 class Historico_irrigacao(models.Model):
     pote = models.ForeignKey(Pote, on_delete=models.CASCADE)
