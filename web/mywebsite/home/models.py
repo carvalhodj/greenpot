@@ -25,6 +25,7 @@ class Pote(models.Model):
         return str(self.codigo)
     codigo = models.IntegerField(primary_key=True)
     planta = models.ForeignKey(Planta, on_delete=models.CASCADE)
+    estado = models.BooleanField(default=1)
 
 
 class Usuario_Pote(models.Model):
@@ -38,6 +39,8 @@ class Historico_irrigacao(models.Model):
     pote = models.ForeignKey(Pote, on_delete=models.CASCADE)
     hora_do_acionamento = models.CharField(max_length=10)
     umidade_inicio = models.CharField(max_length=10)
+    hora_do_desligamento = models.CharField(max_length=10)
+    umidade_final = models.CharField(max_length=10)
     def __str__(self):
         return self.hora_do_acionamento
 

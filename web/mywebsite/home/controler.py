@@ -32,6 +32,9 @@ class BuscarControler:
     def BuscarPostesUsuario(self,usuario):
         potes = Usuario_Pote.objects.filter(user=usuario)
         return potes
+    def BuscarUltimaInsercaoHistorico(self,historico):
+        ultimo = historico[len(historico) - 1]
+        return ultimo
 
 
 class ListAdapter:
@@ -42,8 +45,11 @@ class ListAdapter:
         for x in potes:
             historicopote = buscar.BuscarHistoricoPote(x.pote)
             if len(historicopote) != 0:
-                ultimo = historicopote[len(historicopote) - 1]
-                historicoumidadeatual = AdapterHistoricoUmidadeAtual(x, ultimo.umidade_inicio)
+                ultimo = buscar.BuscarUltimaInsercaoHistorico(historicopote)
+                if (ultimo.umidade_final == ""):
+                    historicoumidadeatual = AdapterHistoricoUmidadeAtual(x, ultimo.umidade_inicio)
+                else:
+                    historicoumidadeatual = AdapterHistoricoUmidadeAtual(x, ultimo.umidade_final)
                 lista.append(historicoumidadeatual)
             else:
                 historicoumidadeatual = AdapterHistoricoUmidadeAtual(x, '')
