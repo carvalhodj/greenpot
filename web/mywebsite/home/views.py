@@ -15,11 +15,11 @@ from rest_framework.response import Response
 from rest_framework import status
 from .serializer import PoteSerializer
 from .controler import CadastroControler, BuscarControler, ListAdapter
-#from mqttClient import Commqtt
+from mqttClient import Commqtt
 
 from DominioDTO import AdapterHistoricoUmidadeAtual
 
-#commqtt = Commqtt()
+commqtt = Commqtt()
 #from .forms import SignUpForm
 
 cadastro = CadastroControler()
@@ -54,7 +54,23 @@ def historico(request, codigo):
     print historicop
     return render(request, 'home/historico.html',{'historicopote': historicop})
 
+def PoteOn(request, codigo):
 
+    post = get_object_or_404(Pote, codigo=codigo)
+    post.estado = 1
+    post.save()
+    commqtt.AcionamentoPote(1)
+
+    return redirect('home')
+
+
+def PoteOff(request, codigo):
+    post = get_object_or_404(Pote, codigo=codigo)
+    post.estado = 0
+    post.save()
+    commqtt.AcionamentoPote(0)
+
+    return redirect('home')
 
 class DetailView(generic.DetailView):
 
@@ -118,6 +134,7 @@ class PoteList(APIView):
 
     def post(self):
         pass
+
 
 
 

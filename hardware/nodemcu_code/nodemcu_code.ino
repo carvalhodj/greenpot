@@ -6,8 +6,6 @@
 #define POWER D4
 #define PUMP D2
 
-#define MQTT_KEEPALIVE 60
-
 const char *ssid = "d3jotaRedmi2Pro";
 const char *password = "qwertyasd";
 const char *mqtt_server = "test.mosquitto.org";
@@ -31,8 +29,6 @@ WiFiUDP ntpUDP;
 char msg[50];
 char msgHistorico[20];
 char msgBuf[50];
-int previousTime = 0;
-int currentTime = 0;
 int value = 0;
 int treshold = 0;
 int umidade = 1000;

@@ -14,8 +14,18 @@
 
 				<div class="col-sm-4 col-lg-2">
 					<div class="thumbnail">
+                    {% if userpote.getPote.pote.estado == 1 %}
+
+                            <input  type="checkbox" disabled  checked data-toggle="toggle" ><a href="{% url 'home.views.PoteOff' codigo=userpote.getPote.pote.codigo %}" class="btn btn-danger">Desligar</a>
+
+
+                        {% else %}
+                            <input  type="checkbox" disabled data-toggle="toggle" ><a href="{% url 'home.views.PoteOn' codigo=userpote.getPote.pote.codigo %}" class="btn btn-success">Ligar</a>
+
+                        {% endif %}
+
 						<a href="{% url 'detail' userpote.getPote.pote.planta.id %}">
-							<input type="checkbox" checked data-toggle="toggle">
+
 							<img src="{{ userpote.getPote.pote.planta.planta_logo }}" class="img-responsive">
 						</a>
 						<div class="caption">
@@ -64,3 +74,4 @@
 
 
 {% endblock%}
+
