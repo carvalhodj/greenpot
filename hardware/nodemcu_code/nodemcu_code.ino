@@ -6,8 +6,6 @@
 #define POWER D4
 #define PUMP D2
 
-#define MQTT_KEEPALIVE 60
-
 const char *ssid = "d3jotaRedmi2Pro";
 const char *password = "qwertyasd";
 const char *mqtt_server = "test.mosquitto.org";
@@ -31,8 +29,6 @@ WiFiUDP ntpUDP;
 char msg[50];
 char msgHistorico[20];
 char msgBuf[50];
-int previousTime = 0;
-int currentTime = 0;
 int value = 0;
 int treshold = 0;
 int umidade = 1000;
@@ -57,10 +53,8 @@ void setup() {
   setupWIFI();
   client.setServer(mqtt_server, 1883);
   client.setCallback(callback);
-//  client.subscribe(topic_tresh_req);
   client.subscribe(topic_tresh_rec);
   client.subscribe(topic_power);
-  client.subscribe(topic_historico);
   requisitarNivelUmidade();
   timeClient.begin();
 }
@@ -70,9 +64,7 @@ void loop() {
     reconectar();
   }
   client.loop();
-  //Serial.println(treshold);
   umidade -= 50; // Simulação de decrescimento de umidade
-  //client.publish("greenpots/codes", (char *) umidade);
   if (!ligaDesliga) {
     Serial.println("Sistema desligado!");
   } 
@@ -128,23 +120,6 @@ void callback(char* topic, byte* payload, unsigned int length)
         int x = 0;
       }
     }
-//    switch ((char) payload[0]) {
-//      case 'L':
-//        digitalWrite(POWER, LOW);
-//        ligaDesliga = true;
-//        Serial.println("Ligado");
-//        break;
-//
-//       case 'D':
-//        digitalWrite(POWER, HIGH);
-//        digitalWrite(PUMP, LOW);
-//        ligaDesliga = false;
-//        break;
-//
-//       default:
-//        String s = ((char *) payload);
-//        treshold = s.toInt();
-//    }
 }
 
 void setupWIFI() {
@@ -191,6 +166,7 @@ void verificarUmidade() {
       digitalWrite(PUMP, HIGH);
       umidade += 20;
       Serial.println("Irrigando...");
+      client.loop(); // modifiquei aqui
       delay(1000);
       }
     publicarHistorico(umidade, 'F');
@@ -205,8 +181,6 @@ void requisitarNivelUmidade() {
   /* Função para requsitar o nível de umidade mínimo para a
    *  sobrevivência da respectiva planta
    */
-  //client.subscribe(topic_tresh_req);
-  //client.subscribe(topic_tresh_rec);
   sprintf(msg, "T-%s", unique_code);
   client.publish(topic_tresh_req, msg);
 }
@@ -216,10 +190,9 @@ int publicarHistorico(int umidade, char momento) {
    *  
    */
    timeClient.update();
-   //Serial.println(timeClient.getFormattedTime());
    timeClient.getFormattedTime().toCharArray(msgBuf, 50);
    sprintf(msgHistorico, "%c_%s_%d", momento, msgBuf, umidade);
-   Serial.println(msgHistorico);
+   client.publish(topic_historico, msgHistorico);
    return 0;
 }
 
