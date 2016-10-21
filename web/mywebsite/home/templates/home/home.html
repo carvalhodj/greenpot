@@ -48,6 +48,25 @@
 
                             <a href="{% url 'home.views.historico' codigo=userpote.getPote.pote.codigo %}" class="btn btn-primary btn-sm" role="button">Historico</a>
 
+							{% if userpote.getAlerta == 1 %}
+
+							<div class="alert alert-danger" role="alert">
+								<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+								<span class="sr-only">Error:</span>
+								Atenção: Pote em lugar irregular. Excesso de humidade
+							</div>
+
+							{% endif %}
+							{% if userpote.getAlerta == 2 %}
+
+							<div class="alert alert-danger" role="alert">
+								<span class="glyphicon glyphicon-exclamation-sign" aria-hidden="true"></span>
+								<span class="sr-only">Error:</span>
+								Atenção: Pote em lugar irregular. Excesso de calor
+							</div>
+
+							{% endif %}
+
 							<!-- Delete Album -->
 
 

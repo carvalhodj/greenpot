@@ -14,19 +14,19 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework import status
 from .serializer import PoteSerializer
-from .controler import CadastroControler, BuscarControler, ListAdapter
+from home.controler import cadastroControler,BuscarControler,listAdapterControler
+
 from mqttClient import Commqtt
 
-from DominioDTO import AdapterHistoricoUmidadeAtual
 
 commqtt = Commqtt()
-#from .forms import SignUpForm
 
-cadastro = CadastroControler()
 
-buscar = BuscarControler()
+cadastro = cadastroControler.CadastroControler()
 
-listadapter = ListAdapter()
+buscar = BuscarControler.BuscarControler()
+
+listadapter = listAdapterControler.ListAdapter()
 
 class HomeView(generic.ListView):
     template_name = 'home/home.html'
@@ -40,9 +40,7 @@ class HomeView(generic.ListView):
 def contact(request):
     form = ContactForm(request.POST or None)
 
-    context = {
-        "form": form,
-    }
+    context = {"form": form,}
     return render(request, "home/forms.html", context)
 
 
@@ -51,7 +49,6 @@ def historico(request, codigo):
     post = get_object_or_404(Pote, codigo=codigo)
     historicopote = buscar.BuscarHistoricoPote(post)
     historicop = list(reversed(historicopote))
-    print historicop
     return render(request, 'home/historico.html',{'historicopote': historicop})
 
 def PoteOn(request, codigo):

@@ -1,17 +1,19 @@
 import paho.mqtt.client as mqtt
 from .models import Pote
-from .controler import BuscarControler, CadastroControler
+from home.controler import BuscarControler, cadastroControler
 
-buscar = BuscarControler()
+buscar = BuscarControler.BuscarControler()
 
-cadastrocontroler = CadastroControler()
+cadastrocontroler = cadastroControler.CadastroControler()
 
 def on_connect(client, userdata, flags, rc):
     print("Connected with result code "+str(rc))
-    client.subscribe("greenpot/1122334490/treshold/req")
-    client.subscribe("greenpot/1122334490/treshold/rec")
-    client.subscribe("greenpot/1122334490/historico")
-
+    #client.subscribe("greenpot/1122334490/treshold/req")
+    #client.subscribe("greenpot/1122334490/treshold/rec")
+    #client.subscribe("greenpot/1122334490/historico")
+    client.subscribe("greenpot/+/treshold/req")
+    client.subscribe("greenpot/+/treshold/rec")
+    client.subscribe("greenpot/+/historico")
 
 def on_message(client, userdata, msg):
 #    if msg.payload[0] == "T":
@@ -24,18 +26,21 @@ def on_message(client, userdata, msg):
 #            pote = 0
 #    else:
 #        print msg.payload
+    q = (msg.topic).split('/')
 
-    if (msg.topic == 'greenpot/1122334490/treshold/req'):
+#    if (msg.topic == 'greenpot/+/treshold/req'):
+    if (q[2] == "req"):
         q = (msg.payload).split('-')
         try:
             pote = buscar.BuscarPoteCodigo(q[1])
             treshold = pote.planta.umidade
-            client.publish("greenpot/1122334490/treshold/rec", treshold)
+            client.publish("greenpot/"+q[1]+"/treshold/rec", treshold)
         except Pote.DoesNotExist:
             pote = 0
 
 
-    if (msg.topic == 'greenpot/1122334490/historico'):
+#    if (msg.topic == 'greenpot/+/historico'):
+    if (q[2] == "historico"):
         q = (msg.topic).split('/')
 
         pote = buscar.BuscarPoteCodigo(str(q[1]))
