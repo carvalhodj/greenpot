@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+<style>
+table, th , td  {
+  border: 1px solid grey;
+  border-collapse: collapse;
+  padding: 5px;
+}
+table tr:nth-child(odd) {
+  background-color: #f1f1f1;
+}
+table tr:nth-child(even) {
+  background-color: #ffffff;
+}
+</style>
+{% load staticfiles %}
+
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.28/angular.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.28/angular-cookies.min.js"></script>
+<body>
+
+<div ng-app="myApp" ng-controller="customersCtrl">
+
+<table>
+  <thead class="thead-default">
+    <tr>
+      <th>Umidade Inicial</th>
+      <th>Hora do Acionamento</th>
+      <th>Umidade Final</th>
+      <th>Hora do Desligamento</th>
+        <th>Data</th>
+    </tr>
+  </thead>
+  <tbody>
+
+{%verbatim%}
+    <tr ng-repeat="x in myData">
+      <td>{{ x.umidade_inicio }}</td>
+      <td>{{ x.hora_do_acionamento }}</td>
+        <td>{{ x.hora_do_desligamento }}</td>
+        <td>{{ x.umidade_final }}</td>
+        <td>{{ x.data }}</td>
+{%endverbatim%}
+    </tr>
+  </tbody>
+
+</table>
+  {{myData}}
+
+
+
+</div>
+
+<script>
+
+var app = angular.module('myApp', []);
+var url = "http://127.0.0.1:8000/api/greenpot/?q=";
+var code = {{ codigo }};
+var res = url.concat(code);
+
+
+app.controller('customersCtrl', function($scope, $http) {
+  $http.get(res).then(function (response) {
+      $scope.myData = response.data;
+	  console.log($scope.myData);
+  });
+});
+</script>
+
+</body>
+</html>
+
+
+</body>
+</html>
+

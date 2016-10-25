@@ -13,6 +13,10 @@ class HistoricoCreateSerializer(ModelSerializer):
             'pote',
             'hora_do_acionamento',
             'umidade_inicio',
+            'hora_do_desligamento',
+            'umidade_final',
+            'data',
+
         ]
 
 
@@ -24,4 +28,7 @@ class HistoricoDetailSerializer(ModelSerializer):
             'pote',
             'hora_do_acionamento',
             'umidade_inicio',
+            'hora_do_desligamento',
+            'umidade_final',
+            'data',
         ]

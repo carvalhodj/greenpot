@@ -20,6 +20,8 @@ urlpatterns = [
 
     url(r'^historico/(?P<codigo>[0-9]+)/$', views.historico),
 
+    url(r'^historicoapi/(?P<codigo>[0-9]+)/$', views.historicoapi),
+
     url(r'^estadooff/(?P<codigo>[0-9]+)/$', views.PoteOff),
 
     url(r'^estadoon/(?P<codigo>[0-9]+)/$', views.PoteOn),

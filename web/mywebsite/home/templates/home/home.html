@@ -46,7 +46,7 @@
 							<!-- View Details -->
 							<a href="{% url 'detail' userpote.getPote.pote.planta.id %}" class="btn btn-primary btn-sm" role="button">Detalhes da planta</a>
 
-                            <a href="{% url 'home.views.historico' codigo=userpote.getPote.pote.codigo %}" class="btn btn-primary btn-sm" role="button">Historico</a>
+                            <a href="{% url 'home.views.historicoapi' codigo=userpote.getPote.pote.codigo %}" class="btn btn-primary btn-sm" role="button">Historico</a>
 
 							{% if userpote.getAlerta == 1 %}
 

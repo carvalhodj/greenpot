@@ -16,10 +16,10 @@ from rest_framework import status
 from .serializer import PoteSerializer
 from home.controler import cadastroControler,BuscarControler,listAdapterControler
 
-from mqttClient import Commqtt
+#from mqttClient import Commqtt
 
 
-commqtt = Commqtt()
+#commqtt = Commqtt()
 
 
 cadastro = cadastroControler.CadastroControler()
@@ -51,6 +51,10 @@ def historico(request, codigo):
     historicop = list(reversed(historicopote))
     return render(request, 'home/historico.html',{'historicopote': historicop})
 
+def historicoapi(request, codigo):
+
+    return render(request, 'home/historicoapi.html',{'codigo':codigo})
+
 def PoteOn(request, codigo):
 
     post = get_object_or_404(Pote, codigo=codigo)
@@ -73,6 +77,7 @@ class DetailView(generic.DetailView):
 
     model = Planta
     template_name = 'home/detail.html'
+
 
 
 
