@@ -1,54 +1,35 @@
-<!DOCTYPE html>
-<html>
-<style>
-table, th , td  {
-  border: 1px solid grey;
-  border-collapse: collapse;
-  padding: 5px;
-}
-table tr:nth-child(odd) {
-  background-color: #f1f1f1;
-}
-table tr:nth-child(even) {
-  background-color: #ffffff;
-}
-</style>
-{% load staticfiles %}
+{% extends 'home/base.html' %}
 
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.28/angular.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.2.28/angular-cookies.min.js"></script>
-<body>
+{% block title %}Historico{% endblock %}
 
-<div ng-app="myApp" ng-controller="customersCtrl">
+{% block body %}
+<div class="well">
+<div align="right" ng-app="myApp" ng-controller="customersCtrl">
 
-<table>
-  <thead class="thead-default">
-    <tr>
-      <th>Umidade Inicial</th>
-      <th>Hora do Acionamento</th>
-      <th>Umidade Final</th>
-      <th>Hora do Desligamento</th>
-        <th>Data</th>
-    </tr>
-  </thead>
-  <tbody>
+  <table align="right">
+    <thead class="thead-default">
+      <tr>
+        <th>Hora de acionamento</th>
+        <th>Umidade</th>
+        <!--<th>Umidade Final</th>
+        <th>Hora do Desligamento</th>-->
+          <th>Data</th>
+      </tr>
+    </thead>
+    <tbody>
 
-{%verbatim%}
+  {%verbatim%}
     <tr ng-repeat="x in myData">
-      <td>{{ x.umidade_inicio }}</td>
       <td>{{ x.hora_do_acionamento }}</td>
-        <td>{{ x.hora_do_desligamento }}</td>
-        <td>{{ x.umidade_final }}</td>
+      <td>{{ x.umidade_inicio }}</td>
+        <!--<td>{{ x.hora_do_desligamento }}</td>
+        <td>{{ x.umidade_final }}</td>-->
         <td>{{ x.data }}</td>
-{%endverbatim%}
+  {%endverbatim%}
     </tr>
   </tbody>
 
-</table>
-  {{myData}}
-
-
-
+  </table>
 </div>
 
 <script>
@@ -62,15 +43,91 @@ var res = url.concat(code);
 app.controller('customersCtrl', function($scope, $http) {
   $http.get(res).then(function (response) {
       $scope.myData = response.data;
-	  console.log($scope.myData);
+      var todosPotes = [];
+      todosPotes.push(['Tempo', 'Umidade']);
+	  for(i=0; i < $scope.myData.length; i++){
+	    dadosPote = [$scope.myData[i].hora_do_acionamento , parseInt($scope.myData[i].umidade_inicio)];
+	    todosPotes.push(dadosPote);
+
+	  }
+
+
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
+
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable(todosPotes);
+
+        var options = {
+          title: 'Historico do Pote ' + code,
+          curveType: 'function',
+          legend: { position: 'bottom' }
+        };
+
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
+
+        chart.draw(data, options);
+      }
+
+
+
   });
 });
+
 </script>
+<!--<script type="text/javascript">
+      var code = {{ codigo }};
+      google.charts.load('current', {'packages':['corechart']});
+      google.charts.setOnLoadCallback(drawChart);
 
-</body>
-</html>
+      function drawChart() {
+        var data = google.visualization.arrayToDataTable([
+          ['Tempo', 'Umidade'],
+          ['12:00:00',  1050],
+		  ['14:00:00',  1020],
+		  ['16:00:00',  800],
+          ['18:00:00',  1170],
+          ['20:00:00',  1050],
+          ['22:00:00',  900]
+        ]);
 
+        var options = {
+          title: 'Historico do Pote ' + code,
+          curveType: 'function',
+          legend: { position: 'bottom' }
+        };
 
-</body>
-</html>
+        var chart = new google.visualization.LineChart(document.getElementById('curve_chart'));
 
+        chart.draw(data, options);
+      }
+      var url = "http://127.0.0.1:8000/api/greenpot/?q=";
+      var code = {{ codigo }};
+      var res = url.concat(code);
+
+      function get_json(res, callback) {
+        http.get(res, function(res) {
+        var body = '';
+        res.on('data', function(chunk) {
+        body += chunk;
+        });
+
+        res.on('end', function() {
+            var response = JSON.parse(body);
+
+      // call function ----v
+                  callback(response);
+              });
+          });
+      }
+
+               // -----------the url---v         ------------the callback---v
+      var mydata = get_json(res, function (resp) {
+          console.log(resp);
+      });
+    </script>-->
+<div align="left" id="curve_chart" style="width: 800px; height: 500px"></div>
+<h4 style="color:white;">Valor da umidade em relacao ao tempo.</h4>
+
+{% endblock %}
+</div>
