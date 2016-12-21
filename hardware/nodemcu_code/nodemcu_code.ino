@@ -6,9 +6,11 @@
 #define POWER D4
 #define PUMP D2
 
-const char *ssid = "d3jotaRedmi2Pro";
-const char *password = "qwertyasd";
-const char *mqtt_server = "test.mosquitto.org";
+const char *ssid = "**********";
+const char *password = "**********";
+const char *mqtt_server = "**********";
+const char *user = "**********";
+const char *passwd = "**********";
 const char *unique_code = "1122334490";
 const char *topic_tresh_req = "greenpot/1122334490/treshold/req";
 const char *topic_tresh_rec = "greenpot/1122334490/treshold/rec";
@@ -51,7 +53,7 @@ void setup() {
    *  
    */
   setupWIFI();
-  client.setServer(mqtt_server, 1883);
+  client.setServer(mqtt_server, 12062);
   client.setCallback(callback);
   client.subscribe(topic_tresh_rec);
   client.subscribe(topic_power);
@@ -135,7 +137,7 @@ void setupWIFI() {
 void reconectar() {
   while (!client.connected()) {
     Serial.println("Conectando ao Broker MQTT.");
-    if (client.connect("ESP8266")) {
+    if (client.connect("ESP8266", user, passwd)) {
       Serial.println("Conectado com Sucesso ao Broker");
 //      client.subscribe(topic_tresh_req);
       client.subscribe(topic_tresh_rec);
